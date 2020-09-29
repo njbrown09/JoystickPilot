@@ -8,6 +8,7 @@ from selfdrive.car.toyota.toyotacan import create_steer_command, create_ui_comma
                                            create_fcw_command
 from selfdrive.car.toyota.values import Ecu, CAR, STATIC_MSGS, SteerLimitParams, TSS2_CAR
 from opendbc.can.packer import CANPacker
+from selfdrive.config import Conversions as CV
 from common.op_params import opParams
 #import cereal.messaging as messaging
 
@@ -19,7 +20,7 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
-ACCEL_MAX = 3.5  # 3.5 m/s2
+ACCEL_MAX = 1.5  # 1.5 m/s2
 ACCEL_MIN = -3.5 # 3.5 m/s2
 ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
 
@@ -128,9 +129,23 @@ class CarController():
     else:
       apply_accel = actuators.gas - actuators.brake
 
+    """
+    0 - 13mph: original max accel of 1.7
+    13-50 mph - 1.7m/s2 - 0.5 m/s2 dropping linearly with speed
+    50 mph + = 0.5
+    """
+    curr_speed_mph = CS.out.vEgo * CV.MS_TO_MPH
+    new_accel_max = ACCEL_MAX
+    if curr_speed_mph > 13:
+      if curr_speed_mph >= 50:
+        new_accel_max = 0.5
+      else:
+        # variable max_aceel between 10 mph and 50 mph
+        new_accel_max = ACCEL_MAX - (((curr_speed_mph - 13.0)/ 37))
+
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady, enabled)
     factor = 2 if ludicrous_mode else 1
-    apply_accel = clip(apply_accel * ACCEL_SCALE * factor, ACCEL_MIN, ACCEL_MAX)
+    apply_accel = clip(apply_accel * ACCEL_SCALE * factor, ACCEL_MIN, new_accel_max)
     #if ludicrous_mode:
     #  print(apply_accel)
     if CS.CP.enableGasInterceptor:
@@ -253,7 +268,7 @@ class CarController():
 
     for (addr, ecu, cars, bus, fr_step, vl) in STATIC_MSGS:
       if frame % fr_step == 0 and ecu in self.fake_ecus and CS.CP.carFingerprint in cars:
-        
+
         ## special cases
         #if fr_step == 5 and ecu == Ecu.fwdCamera and bus == 1:
         #  #print(addr)
@@ -267,7 +282,7 @@ class CarController():
         #    # 0x48a has a 8 preceding the counter
         #    cnt += 1 << 7
         #  vl += bytes([cnt])
-          
+
         can_sends.append(make_can_msg(addr, vl, bus))
 
     # Enable blindspot debug mode once
