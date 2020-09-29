@@ -27,31 +27,31 @@ def calc_d_poly(l_poly, r_poly, p_poly, l_prob, r_prob, lane_width, v_ego):
   # these numbers were tested on 2000segments and found to work well
 
   # START curb offset calculator
-  RIGHT_MAX_CURB_OFFSET = 0.3
-  LEFT_CURB_OFFSET = 0.1
-  curb_offset = 0.
+  #RIGHT_MAX_CURB_OFFSET = 0.3
+  #LEFT_CURB_OFFSET = 0.1
+  #curb_offset = 0.
 
-  if l_prob >= 0.5:
+  #if l_prob >= 0.5:
    # only apply correction if there is high confidence on left lane line
 
-   if r_prob < 0.2:
-     curb_offset = RIGHT_MAX_CURB_OFFSET
-   elif r_prob >=0.7:
-     pass
-   else:
-     multiplier = RIGHT_MAX_CURB_OFFSET/(0.7 - 0.2)
-     curb_offset = multiplier * (r_prob - 0.2)
+   #if r_prob < 0.2:
+    # curb_offset = RIGHT_MAX_CURB_OFFSET
+   #elif r_prob >=0.7:
+    # pass
+   #else:
+     #multiplier = RIGHT_MAX_CURB_OFFSET/(0.7 - 0.2)
+     #curb_offset = multiplier * (r_prob - 0.2)
 
    # adding to same poly that is used for CAMERA_OFFSET
-   l_poly[3] += curb_offset
-   r_poly[3] += curb_offset
+  #l_poly[3] += curb_offset
+   #r_poly[3] += curb_offset
 
-  if r_prob >= 0.7 and l_prob < 0.3:
+  #if r_prob >= 0.7 and l_prob < 0.3:
    # curb on left. drive a little bit towards center lane
 
    # adding to same poly that is used for CAMERA_OFFSET
-   l_poly[3] -= LEFT_CURB_OFFSET
-   r_poly[3] -= LEFT_CURB_OFFSET
+   #l_poly[3] -= LEFT_CURB_OFFSET
+   #r_poly[3] -= LEFT_CURB_OFFSET
 
   # END curb offset end calculation
   width_poly = l_poly - r_poly
