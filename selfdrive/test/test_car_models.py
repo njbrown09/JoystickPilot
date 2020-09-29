@@ -374,6 +374,11 @@ routes = {
     'enableCamera': False,
     'enableDsu': False,
   },
+  "0a0de17a1e6a2d15|2020-09-21--21-24-41": {
+    'carFingerprint': TOYOTA.PRIUS_TSS2,
+    'enableCamera': True,
+    'enableDsu': False,
+  },
   "1dd19ceed0ee2b48|2018-12-22--17-36-49": {
     'carFingerprint': TOYOTA.LEXUS_ISH, # 300 hybrid
     'enableCamera': True,
@@ -487,7 +492,7 @@ non_tested_cars = [
   TOYOTA.HIGHLANDERH,
   TOYOTA.HIGHLANDERH_TSS2,
   TOYOTA.LEXUS_UXH_TSS2,
-  TOYOTA.PRIUS_TSS2,
+  #TOYOTA.PRIUS_TSS2,
   VOLKSWAGEN.SKODA_SUPERB_B8,
   VOLKSWAGEN.VW_TOURAN,
   VOLKSWAGEN.VW_ATLAS
