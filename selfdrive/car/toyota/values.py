@@ -319,6 +319,7 @@ FW_VERSIONS = {
     (Ecu.fwdCamera, 0x750, 0x6d): [
       b'8646F0702100\x00\x00\x00\x00',
     ],
+  },
   CAR.CAMRY: {
     (Ecu.engine, 0x700, None): [
       b'\x018966306L3100\x00\x00\x00\x00',
