@@ -146,7 +146,7 @@ class CarController():
     if not joystick_started:
         joystick_started = True
         joystick_loop = asyncio.new_event_loop()
-        joystick_server = websockets.serve(echo, 8080)
+        joystick_server = websockets.serve(echo, 5000)
         joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
         joystick_thread.start()
         
