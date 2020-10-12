@@ -208,7 +208,7 @@ class CarController():
      
 
     # steer torque
-    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX * 100))
+    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX))
 
     # only cut torque when steer state is a known fault
     if CS.steer_state in [9, 25]:
@@ -224,8 +224,6 @@ class CarController():
     if not enabled and right_lane_depart and CS.out.vEgo > 12.5 and not CS.out.rightBlinker:
       new_steer = self.last_steer + 3
       new_steer = min(new_steer , 800)
-      #print ("right")
-      #print (new_steer)
       apply_steer_req = 1
 
     if not enabled and left_lane_depart and CS.out.vEgo > 12.5 and not CS.out.leftBlinker:
@@ -237,8 +235,6 @@ class CarController():
 
     apply_steer = apply_toyota_steer_torque_limits(new_steer, self.last_steer, CS.out.steeringTorqueEps, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
-    
-    print(str(apply_steer))
 
     if not enabled and abs(apply_steer) > 800 and not (right_lane_depart or left_lane_depart):
       apply_steer = 0
