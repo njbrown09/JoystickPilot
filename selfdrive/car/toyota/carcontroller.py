@@ -31,8 +31,8 @@ def joystick_start_loop():
     joystick_loop = asyncio.new_event_loop()
     joystick_server = websockets.serve(echo, 5000)
     
-    joystick_loop.run_until_complete(joystick_server)
-    joystick_loop.run_forever()
+    asyncio.get_event_loop().run_until_complete(joystick_server)
+    asyncio.get_event_loop().run_forever()
 
 #Joystick shit
 joystick_started = False
