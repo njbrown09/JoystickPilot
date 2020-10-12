@@ -28,11 +28,15 @@ async def JoystickMethod(websocket, path):
 
     await websocket.send(greeting)
     print(f"> {greeting}")
+    
+def joystick_start_loop(loop, server):
+    loop.run_until_complete(server)
+    loop.run_forever()
 
 #Joystick shit
 joystick_loop = asyncio.new_event_loop()
 joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
-joystick_loop = Thread(target=start_loop, args=(joystick_loop, joystick_server))
+joystick_loop = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
 print("Starting joystick server")
 joystick_loop.start()
 
