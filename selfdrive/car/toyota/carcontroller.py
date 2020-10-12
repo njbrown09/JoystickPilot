@@ -28,9 +28,9 @@ async def JoystickMethod(websocket, path):
     print(f"> {greeting}")
     
 def joystick_start_loop(loop, server):
+    print("Loop123 Ran")
     loop.run_until_complete(server)
     loop.run_forever()
-    print("Loop Ran!")
 
 #Joystick shit
 joystick_started = False
