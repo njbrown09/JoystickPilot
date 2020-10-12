@@ -1,5 +1,7 @@
 from cereal import car
 import json
+import asyncio
+import websockets
 from common.params import Params
 from common.numpy_fast import clip
 from selfdrive.car import apply_toyota_steer_torque_limits, create_gas_command, make_can_msg, gen_empty_fingerprint
@@ -24,7 +26,7 @@ async def JoystickMethod(websocket, path):
     name = await websocket.recv()
     print(f"< {name}")
 
-    greeting = f"Hello {name}!"
+    greeting = f"Hello!"
 
     await websocket.send(greeting)
     print(f"> {greeting}")
@@ -133,7 +135,8 @@ class CarController():
     
     #Test set steer to 100
     actuators.steer = 100
-    actuators.gas = 1
+    actuators.gas = 0
+    actuators.brake = 1
     
 
     apply_gas = clip(actuators.gas, 0., 1.)
