@@ -150,7 +150,7 @@ class CarController():
         joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
         joystick_thread.start()
         
-    print("Joystick started " + str(joystick_started));
+    //print("Joystick started " + str(joystick_started));
     
     
     #Test set steer to 100
