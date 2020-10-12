@@ -23,6 +23,8 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 async def echo(websocket, path):
 
     global joystick_accel
+    global joystick_brake
+    global joystick_steer
     async for message in websocket:
         
         messageJson = json.loads(message)
