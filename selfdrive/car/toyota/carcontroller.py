@@ -323,7 +323,7 @@ class CarController():
     # Check for joystick alert
     if joystick_alert:
         joystick_alert = False
-        can_sends.append(create_ui_command(self.packer, steer_alert, pcm_cancel_cmd, left_line, right_line, left_lane_depart, right_lane_depart))
+        can_sends.append(create_ui_command(self.packer, True, pcm_cancel_cmd, left_line, right_line, left_lane_depart, right_lane_depart))
 
     #*** static msgs ***
 
