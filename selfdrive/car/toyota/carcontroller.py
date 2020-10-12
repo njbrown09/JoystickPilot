@@ -27,6 +27,7 @@ joystick_brake = 0.000
 joystick_steer = 0.000
 joystick_enabled = False
 joystick_started = False
+joystick_alert = False
 joystick_server = None
 
 async def JoystickRecieve(websocket, path):
@@ -34,9 +35,17 @@ async def JoystickRecieve(websocket, path):
     global joystick_accel
     global joystick_brake
     global joystick_steer
+    global joystick_enabled
+    global joystick_alert
+    
     async for message in websocket:
         
         messageJson = json.loads(message)
+        
+        # Check if we should make an alert
+        if joystick_enabled != bool(messageJson["Enabled"]):
+            joystick_alert = True
+        
         joystick_enabled = bool(messageJson["Enabled"]);
         joystick_accel = float(messageJson["Gas"])
         joystick_brake = float(messageJson["Brake"])
@@ -157,6 +166,7 @@ class CarController():
     global joystick_started
     global joystick_thread
     global joystick_enabled
+    global joystick_alert
     global joystick_accel
     global joystick_brake
     global joystick_steer
@@ -169,6 +179,13 @@ class CarController():
         
     #print("Joystick started " + str(joystick_started));
     
+    can_sends = []
+    
+    
+    # Check for joystick alert
+    if joystick_alert:
+        joystick_alert = False
+        can_sends.append(create_ui_command(self.packer, steer_alert, pcm_cancel_cmd, left_line, right_line, left_lane_depart, right_lane_depart))
     
     #Set actuators to joystick
     if joystick_enabled:
@@ -252,8 +269,6 @@ class CarController():
     self.last_steer = apply_steer
     self.last_accel = apply_accel
     self.last_standstill = CS.out.standstill
-
-    can_sends = []
 
     #*** control msgs ***
     #print("steer {0} {1} {2} {3}".format(apply_steer, min_lim, max_lim, CS.steer_torque_motor)
