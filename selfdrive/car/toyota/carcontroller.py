@@ -214,7 +214,12 @@ class CarController():
     if CS.steer_state in [9, 25]:
       self.last_fault_frame = frame
 
-    apply_steer_req = 1
+    # Cut steering for 1s after fault
+    if (frame - self.last_fault_frame < 100) or abs(CS.out.steeringRate) > 100000 or (abs(CS.out.steeringAngle) > 1500000 and CS.CP.carFingerprint in [CAR.RAV4H, CAR.PRIUS]) or abs(CS.out.steeringAngle) > 40000000:
+      new_steer = 0
+      apply_steer_req = 0
+    else:
+      apply_steer_req = 1
 
     if not enabled and right_lane_depart and CS.out.vEgo > 12.5 and not CS.out.rightBlinker:
       new_steer = self.last_steer + 3
