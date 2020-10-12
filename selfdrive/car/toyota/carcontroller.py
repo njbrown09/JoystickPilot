@@ -118,6 +118,11 @@ class CarController():
     # *** compute control surfaces ***
 
     # gas and brake
+    
+    #Test set steer to 100
+    actuators.steer = 100
+    actuators.gas = 1
+    
 
     apply_gas = clip(actuators.gas, 0., 1.)
 
@@ -144,6 +149,8 @@ class CarController():
         apply_accel = max(apply_accel, 0.0)
       if CS.out.brakePressed and CS.out.vEgo > 1:
         apply_accel = min(apply_accel, 0.0)
+        
+     
 
     # steer torque
     new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX))
