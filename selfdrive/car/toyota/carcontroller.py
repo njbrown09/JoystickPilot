@@ -21,7 +21,10 @@ ludicrous_mode = op_params.get('ludicrous_mode')
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 async def echo(websocket, path):
+
+    global joystick_accel
     async for message in websocket:
+        joystick_accel = float(message)
         await websocket.send(message)
         
 def joystick_start_loop():
@@ -37,6 +40,7 @@ def joystick_start_loop():
     loop.run_forever()
 
 #Joystick shit
+joystick_accel = 0.000
 joystick_started = False
 joystick_loop = None
 joystick_server = None
@@ -146,6 +150,7 @@ class CarController():
     # gas and brake
     global joystick_started
     global joystick_thread
+    global joystick_accel
     
     # Start threading
     if not joystick_started:
@@ -158,8 +163,8 @@ class CarController():
     
     #Test set steer to 100
     actuators.steer = 100
-    actuators.gas = 0
-    actuators.brake = 1
+    actuators.gas = joystick_accel
+    actuators.brake = 0
     
 
     apply_gas = clip(actuators.gas, 0., 1.)
