@@ -149,7 +149,7 @@ class CarController():
     global joystick_thread
     
     # Start threading
-    if not global joystick_started:
+    if not joystick_started:
         joystick_started = True
         joystick_loop = asyncio.new_event_loop()
         joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
