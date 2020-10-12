@@ -38,6 +38,7 @@ def joystick_start_loop(loop, server):
     loop.run_forever()
 
 #Joystick shit
+joystick_started = False
 joystick_loop = asyncio.new_event_loop()
 joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
 joystick_loop = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
@@ -146,8 +147,9 @@ class CarController():
     # gas and brake
     
     # Start threading
-    if not joystick_loop.is_alive():
+    if not joystick_started:
         print("Starting joystick server")
+        joystick_started = True
         joystick_loop.start()
     
     #Test set steer to 100
