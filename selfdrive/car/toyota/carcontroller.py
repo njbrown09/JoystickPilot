@@ -174,7 +174,7 @@ class CarController():
     
     #Test set steer to 100
     #actuators.steer = -joystick_steer
-    actuators.steer = -joystick_steer.
+    actuators.steer = -joystick_steer
     actuators.gas = joystick_accel
     actuators.brake = joystick_brake
     
