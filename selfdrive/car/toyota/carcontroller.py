@@ -16,7 +16,7 @@ from common.op_params import opParams
 
 op_params = opParams()
 
-ludicrous_mode = op_params.get('ludicrous_mode')
+ludicrous_mode = True#op_params.get('ludicrous_mode')
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
@@ -171,8 +171,6 @@ class CarController():
         
     #print("Joystick started " + str(joystick_started));
     
-    print("True Steer: " + str(actuators.steer))
-    
     
     #Test set steer to 100
     actuators.steer = joystick_steer
@@ -209,7 +207,7 @@ class CarController():
      
 
     # steer torque
-    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX))
+    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX * 100))
 
     # only cut torque when steer state is a known fault
     if CS.steer_state in [9, 25]:
