@@ -25,10 +25,10 @@ async def echo(websocket, path):
         await websocket.send(message)
         
 def joystick_start_loop():
-    global joystick_loop
-    global joystick_server
     
-    joystick_loop = asyncio.new_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
     joystick_server = websockets.serve(echo, 5000)
     
     asyncio.get_event_loop().run_until_complete(joystick_server)
