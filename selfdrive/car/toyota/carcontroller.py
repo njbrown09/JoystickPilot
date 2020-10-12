@@ -173,8 +173,8 @@ class CarController():
     
     
     #Test set steer to 100
-    actuators.steer = -joystick_steer
-    actuators.steerAngle = -joystick_steer * 43.
+    #actuators.steer = -joystick_steer
+    actuators.steerAngle = (-joystick_steer) * 360.
     actuators.gas = joystick_accel
     actuators.brake = joystick_brake
     
