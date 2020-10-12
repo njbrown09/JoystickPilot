@@ -21,6 +21,10 @@ ludicrous_mode = op_params.get('ludicrous_mode')
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 async def JoystickMethod(websocket, path):
+
+    while true:
+        print("Test Working")
+    
     name = await websocket.recv()
     print(f"< {name}")
 
