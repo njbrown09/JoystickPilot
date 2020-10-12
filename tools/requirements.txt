@@ -1,4 +1,6 @@
 aenum
+asyncio
+websockets
 atomicwrites
 futures
 libarchive

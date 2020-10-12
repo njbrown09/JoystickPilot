@@ -17,6 +17,18 @@ ludicrous_mode = op_params.get('ludicrous_mode')
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
+#Joystick shit
+joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
+
+async def JoystickMethod(websocket, path):
+    name = await websocket.recv()
+    print(f"< {name}")
+
+    greeting = f"Hello {name}!"
+
+    await websocket.send(greeting)
+    print(f"> {greeting}")
+
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
 ACCEL_MAX = 3.5  # 3.5 m/s2
