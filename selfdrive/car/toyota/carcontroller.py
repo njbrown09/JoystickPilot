@@ -24,7 +24,12 @@ async def echo(websocket, path):
 
     global joystick_accel
     async for message in websocket:
-        joystick_accel = float(message)
+        
+        messageJson = json.loads(message)
+            
+        joystick_accel = float(messageJson["gas"])
+        joystick_brake = float(messageJson["brake"])
+        joystick_steer = float(messageJson["steering"])
         await websocket.send(message)
         
 def joystick_start_loop():
@@ -41,6 +46,8 @@ def joystick_start_loop():
 
 #Joystick shit
 joystick_accel = 0.000
+joystick_brake = 0.000
+joystick_steer = 0.000
 joystick_started = False
 joystick_loop = None
 joystick_server = None
@@ -151,6 +158,8 @@ class CarController():
     global joystick_started
     global joystick_thread
     global joystick_accel
+    global joystick_brake
+    global joystick_steer
     
     # Start threading
     if not joystick_started:
@@ -162,9 +171,9 @@ class CarController():
     
     
     #Test set steer to 100
-    actuators.steer = 100
+    actuators.steer = joystick_steer
     actuators.gas = joystick_accel
-    actuators.brake = 0
+    actuators.brake = joystick_brake
     
 
     apply_gas = clip(actuators.gas, 0., 1.)
