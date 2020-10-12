@@ -24,7 +24,7 @@ async def echo(websocket, path):
     async for message in websocket:
         await websocket.send(message)
         
-def joystick_start_loop(loop, server):
+def joystick_start_loop():
     global joystick_loop
     global joystick_server
     
