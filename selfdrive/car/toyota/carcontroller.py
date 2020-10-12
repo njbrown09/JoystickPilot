@@ -27,9 +27,9 @@ async def echo(websocket, path):
         
         messageJson = json.loads(message)
             
-        joystick_accel = float(messageJson["gas"])
-        joystick_brake = float(messageJson["brake"])
-        joystick_steer = float(messageJson["steering"])
+        joystick_accel = float(messageJson["Gas"])
+        joystick_brake = float(messageJson["Brake"])
+        joystick_steer = float(messageJson["Steering"])
         await websocket.send(message)
         
 def joystick_start_loop():
