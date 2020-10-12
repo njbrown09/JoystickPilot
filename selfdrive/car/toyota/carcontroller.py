@@ -208,14 +208,14 @@ class CarController():
      
 
     # steer torque
-    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX))
+    new_steer = int(round(actuators.steer * SteerLimitParams.STEER_MAX * 100))
 
     # only cut torque when steer state is a known fault
     if CS.steer_state in [9, 25]:
       self.last_fault_frame = frame
 
     # Cut steering for 1s after fault
-    if (frame - self.last_fault_frame < 100) or abs(CS.out.steeringRate) > 100000000 or (abs(CS.out.steeringAngle) > 1500000000 and CS.CP.carFingerprint in [CAR.RAV4H, CAR.PRIUS]) or abs(CS.out.steeringAngle) > 4000000000:
+    if (frame - self.last_fault_frame < 100) or abs(CS.out.steeringRate) > 100 or (abs(CS.out.steeringAngle) > 150 and CS.CP.carFingerprint in [CAR.RAV4H, CAR.PRIUS]) or abs(CS.out.steeringAngle) > 400:
       new_steer = 0
       apply_steer_req = 0
     else:
