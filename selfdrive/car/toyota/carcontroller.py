@@ -16,11 +16,20 @@ from common.op_params import opParams
 
 op_params = opParams()
 
-ludicrous_mode = True#op_params.get('ludicrous_mode')
+ludicrous_mode = op_params.get('ludicrous_mode')
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
-async def echo(websocket, path):
+
+#Joystick shit
+joystick_accel = 0.000
+joystick_brake = 0.000
+joystick_steer = 0.000
+joystick_enabled = False
+joystick_started = False
+joystick_server = None
+
+async def JoystickRecieve(websocket, path):
 
     global joystick_accel
     global joystick_brake
@@ -28,7 +37,7 @@ async def echo(websocket, path):
     async for message in websocket:
         
         messageJson = json.loads(message)
-            
+        joystick_enabled = bool(messageJson["Enabled"]);
         joystick_accel = float(messageJson["Gas"])
         joystick_brake = float(messageJson["Brake"])
         joystick_steer = float(messageJson["Steering"])
@@ -37,23 +46,11 @@ async def echo(websocket, path):
 def joystick_start_loop():
 
     global joystick_server
-    
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    
-    joystick_server = websockets.serve(echo, "0.0.0.0", 5000)
-    
+    joystick_server = websockets.serve(JoystickRecieve, "0.0.0.0", 5000)
     loop.run_until_complete(joystick_server)
     loop.run_forever()
-
-#Joystick shit
-joystick_accel = 0.000
-joystick_brake = 0.000
-joystick_steer = 0.000
-joystick_started = False
-joystick_loop = None
-joystick_server = None
-joystick_thread = None
 
 
 # Accel limits
@@ -159,6 +156,7 @@ class CarController():
     # gas and brake
     global joystick_started
     global joystick_thread
+    global joystick_enabled
     global joystick_accel
     global joystick_brake
     global joystick_steer
@@ -172,11 +170,11 @@ class CarController():
     #print("Joystick started " + str(joystick_started));
     
     
-    #Test set steer to 100
-    #actuators.steer = -joystick_steer
-    actuators.steer = -joystick_steer
-    actuators.gas = joystick_accel
-    actuators.brake = joystick_brake
+    #Set actuators to joystick
+    if joystick_enabled:
+        actuators.steer = -joystick_steer
+        actuators.gas = joystick_accel
+        actuators.brake = joystick_brake
     
 
     apply_gas = clip(actuators.gas, 0., 1.)
