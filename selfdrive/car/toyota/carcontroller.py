@@ -150,10 +150,10 @@ class CarController():
         joystick_started = True
         joystick_loop = asyncio.new_event_loop()
         joystick_server = websockets.serve(JoystickMethod, 9090)
-        joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
-        joystick_thread.start()
-        
-    print("Joystick started " + str(joystick_started));
+        asyncio.get_event_loop().run_until_complete(joystick_server)
+        asyncio.get_event_loop().run_forever()
+        #joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
+        #joystick_thread.start()
     
     
     #Test set steer to 100
