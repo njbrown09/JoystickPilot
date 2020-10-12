@@ -36,6 +36,10 @@ def joystick_start_loop(loop, server):
 
 #Joystick shit
 joystick_started = False
+joystick_loop = asyncio.new_event_loop()
+joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
+joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
+joystick_thread.start()
 
 
 # Accel limits
@@ -141,15 +145,9 @@ class CarController():
     # gas and brake
     
     # Start threading
-    try:
-        joystick_started
-    except NameError:
+    if not global joystick_started:
         joystick_started = True
-        joystick_loop = asyncio.new_event_loop()
-        joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
-        joystick_loop = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
-        joystick_loop.start()
-        print("Starting joystick server")
+        joystick_thread.start()
     
     
     #Test set steer to 100
