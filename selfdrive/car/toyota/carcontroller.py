@@ -36,10 +36,9 @@ def joystick_start_loop(loop, server):
 
 #Joystick shit
 joystick_started = False
-joystick_loop = asyncio.new_event_loop()
-joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
-joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
-joystick_thread.start()
+joystick_loop = None
+joystick_server = None
+joystick_thread = None
 
 
 # Accel limits
