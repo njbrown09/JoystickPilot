@@ -171,6 +171,8 @@ class CarController():
         
     #print("Joystick started " + str(joystick_started));
     
+    print("True Steer: " + str(actuators.steer))
+    
     
     #Test set steer to 100
     actuators.steer = joystick_steer
