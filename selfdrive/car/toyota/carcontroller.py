@@ -23,6 +23,16 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 async def echo(websocket, path):
     async for message in websocket:
         await websocket.send(message)
+        
+def joystick_start_loop(loop, server):
+    global joystick_loop
+    global joystick_server
+    
+    joystick_loop = asyncio.new_event_loop()
+    joystick_server = websockets.serve(echo, 5000)
+    
+    joystick_loop.run_until_complete(joystick_server)
+    joystick_loop.run_forever()
 
 #Joystick shit
 joystick_started = False
@@ -133,17 +143,13 @@ class CarController():
 
     # gas and brake
     global joystick_started
-    global joystick_loop
-    global joystick_server
     global joystick_thread
     
     # Start threading
     if not joystick_started:
         joystick_started = True
-        joystick_loop = asyncio.new_event_loop()
-        joystick_server = websockets.serve(echo, 5000)
-        joystick_loop.run_until_complete(server)
-        joystick_loop.run_forever()
+        joystick_thread = Thread(target=joystick_start_loop, args=())
+        joystick_thread.start()
         
     #print("Joystick started " + str(joystick_started));
     
