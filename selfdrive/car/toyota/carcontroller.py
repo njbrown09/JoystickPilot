@@ -1,6 +1,7 @@
 from cereal import car
 import json
 import asyncio
+from threading import Thread
 import websockets
 from common.params import Params
 from common.numpy_fast import clip
