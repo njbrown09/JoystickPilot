@@ -305,6 +305,11 @@ class CarController():
     fcw_alert = hud_alert == VisualAlert.fcw
     steer_alert = hud_alert == VisualAlert.steerRequired
 
+    # Check for joystick alert
+    if joystick_alert:
+        joystick_alert = False
+        steer_alert = True
+
     send_ui = False
     if ((fcw_alert or steer_alert) and not self.alert_active) or \
        (not (fcw_alert or steer_alert) and self.alert_active):
@@ -320,10 +325,6 @@ class CarController():
     if frame % 100 == 0 and (Ecu.dsu in self.fake_ecus or Ecu.unknown in self.fake_ecus):
       can_sends.append(create_fcw_command(self.packer, fcw_alert))
       
-    # Check for joystick alert
-    if joystick_alert:
-        joystick_alert = False
-        can_sends.append(create_ui_command(self.packer, True, pcm_cancel_cmd, left_line, right_line, left_lane_depart, right_lane_depart))
 
     #*** static msgs ***
 
