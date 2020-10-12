@@ -20,13 +20,10 @@ ludicrous_mode = op_params.get('ludicrous_mode')
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
-async def JoystickMethod(websocket, path):
-
-    greeting = f"Hello!"
-
-    await websocket.send(greeting)
-    print(f"> {greeting}")
-    
+async def echo(websocket, path):
+    async for message in websocket:
+        await websocket.send(message)
+        
 def joystick_start_loop(loop, server):
     print("Loop123 Ran")
     loop.run_until_complete(server)
@@ -149,11 +146,11 @@ class CarController():
     if not joystick_started:
         joystick_started = True
         joystick_loop = asyncio.new_event_loop()
-        joystick_server = websockets.serve(JoystickMethod, 9090)
-        asyncio.get_event_loop().run_until_complete(joystick_server)
-        asyncio.get_event_loop().run_forever()
-        #joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
-        #joystick_thread.start()
+        joystick_server = websockets.serve(echo, 8080)
+        joystick_thread = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
+        joystick_thread.start()
+        
+    print("Joystick started " + str(joystick_started));
     
     
     #Test set steer to 100
