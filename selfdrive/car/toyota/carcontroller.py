@@ -234,7 +234,7 @@ class CarController():
       #print (new_steer)
       apply_steer_req = 1
 
-    apply_steer = apply_toyota_steer_torque_limits(new_steer, self.last_steer, CS.out.steeringTorqueEps, SteerLimitParams)
+    apply_steer = new_steer#apply_toyota_steer_torque_limits(new_steer, self.last_steer, CS.out.steeringTorqueEps, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
 
     if not enabled and abs(apply_steer) > 800 and not (right_lane_depart or left_lane_depart):
