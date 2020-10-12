@@ -149,7 +149,7 @@ class CarController():
         joystick_server = websockets.serve(JoystickMethod, "0.0.0.0", 9090)
         joystick_loop = Thread(target=joystick_start_loop, args=(joystick_loop, joystick_server))
         joystick_loop.start()
-         print("Starting joystick server")
+        print("Starting joystick server")
     
     
     #Test set steer to 100
